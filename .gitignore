@@ -1,0 +1,38 @@
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+media/
+staticfiles/
+
+# Environments #
+venv/
+.env
+*.env
+
+# IDEs and editors #
+.idea/
+.vscode/
+*.swp
+*~
+.project
+.pydevproject
+
+# Migrations #
+**/migrations/
+
+# Deployment #
+*.pid
+*.seed
+*.cover
+*.orig
+*.rej
+*.so
+.DS_Store
+
+# Pytest #
+.pytest_cache/
+htmlcov/
+.tox/
