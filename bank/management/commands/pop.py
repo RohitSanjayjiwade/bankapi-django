@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from bank.models import Branch  # Ensure the correct model import
+from django.shortcuts import render,get_object_or_404
+from bank.models import Branch, Bank  # Ensure the correct model import
 import pandas as pd
 
 class Command(BaseCommand):
@@ -36,6 +37,8 @@ class Command(BaseCommand):
         bankId = row.get('bank_id', '')
 
         try:
+             # Fetch the Bank instance using the bank_id
+            bank = Bank.objects.get(id=row['bank_id'])
             # Create a new Branch instance
             Branch.objects.create(
                 ifsc=ifscCode,
@@ -44,7 +47,8 @@ class Command(BaseCommand):
                 city=cityName,
                 district=districtName,
                 state=stateName,
-                bank_id_id=bankId
+                bank_id=bank  # Assign the Bank instance
+                # bank_id=bankId
             )
         except Exception as e:
             print(f"Error processing row: {row}")
