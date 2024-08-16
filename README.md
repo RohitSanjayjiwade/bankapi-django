@@ -1,126 +1,90 @@
-# Bank Branch API
+# Bank API - RESTful API for Bank and Branch Details
 
-This Django project provides a RESTful API for querying bank and branch details. It also includes a custom Django management command to populate the branch data from a CSV file into the PostgreSQL database.
+This project provides a RESTful API service for querying bank and branch details. It was developed using Django and Django REST Framework, with data stored in an SQLite database. The project was originally designed to use PostgreSQL, but due to free-tier limitations on PythonAnywhere, SQLite was used instead. The project has been successfully deployed on PythonAnywhere [https://apurvapandit.pythonanywhere.com/].
 
-## Project Structure
+## Features
+- **REST API Endpoints**:
+  - `/api/banks/`: Retrieve a list of all banks.
+  - `/api/banks/<pk>/`: Retrieve details for a specific bank by its primary key (ID).
+  - `/api/branches/`: Retrieve a list of all branches.
+  - `/api/branches/<ifsc>/`: Retrieve details for a specific branch by its IFSC code.
+- **Data Import**: Management commands (`pop.py` and `stats.py`) for populating the database with banks and branches from CSV files.
+- **Clean Code**: The project adheres to best practices and clean coding principles.
 
-- **bank/models.py**: Contains the models `Bank` and `Branch`.
-- **bank/serializers.py**: Serializers to convert model instances to JSON format for API responses.
-- **bank/views.py**: API views for handling requests to the endpoints.
-- **bank/urls.py**: URL routing for the API endpoints.
-- **bank/management/commands/pop.py**: Custom Django management command to populate branch data from a CSV file.
-- **manage.py**: Django's command-line utility.
-- **db.sqlite3**: (Optional) Default SQLite database used during development.
+## How to Run the Project Locally
 
-## Models
+1. **Clone the Repository**:
+    ```bash
+    git clone <your-repo-link>
+    cd <your-repo-directory>
+    ```
 
-### Bank
+2. **Create and Activate a Virtual Environment**:
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
 
-- **id**: Primary key, BigInteger.
-- **name**: CharField, max length 49.
+3. **Install the Dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-### Branch
+4. **Run the Migrations**:
+    ```bash
+    python manage.py migrate
+    ```
 
-- **ifsc**: Primary key, CharField, max length 11.
-- **bank_id**: ForeignKey, related to `Bank`.
-- **branch**: CharField, max length 74.
-- **address**: CharField, max length 195.
-- **city**: CharField, max length 50.
-- **district**: CharField, max length 50.
-- **state**: CharField, max length 26.
+5. **Populate the Database**:
+    - Add bank data: 
+      ```bash
+      python manage.py stats
+      ```
+    - Add branch data:
+      ```bash
+      python manage.py pop
+      ```
 
-## API Endpoints
-
-### REST API
-
-1. **API Root**
-   - **URL**: `/`
-   - **Method**: GET
-   - **Description**: Returns the list of available endpoints.
-
-2. **List Banks**
-   - **URL**: `/banks/`
-   - **Method**: GET
-   - **Description**: Returns a list of all banks.
-
-3. **Bank Details**
-   - **URL**: `/banks/<int:pk>/`
-   - **Method**: GET
-   - **Description**: Returns details of a specific bank along with its branches.
-
-4. **List Branches**
-   - **URL**: `/branches/`
-   - **Method**: GET
-   - **Description**: Returns a list of all branches.
-
-5. **Branch Details**
-   - **URL**: `/branches/<str:ifsc>/`
-   - **Method**: GET
-   - **Description**: Returns details of a specific branch.
-
-## Installation
-
-### Prerequisites
-
-- Python 3.8+
-- PostgreSQL
-- Django 4.2+
-- Django REST Framework
-
-### Setup
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/your-username/bank-branch-api.git
-   cd bank-branch-api
-
-2. **Create a virtual environment:**
-
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-
-3. **Install the required packages:**
-
-   ```bash
-   pip install -r requirements.txt
-
-4. **Setup PostgreSQL:**
-
-    Create a PostgreSQL database and configure your `DATABASES` setting in `settings.py`
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': 'bank_data',  # Replace with your database name
-                'USER': 'postgres',  # Replace with your PostgreSQL username
-                'PASSWORD': 'yourpassword',  # Replace with your PostgreSQL password
-                'HOST': 'localhost',
-                'PORT': '5432',
-            }
-        }
-
-    Apply migrations:
-        ```bash
-        python manage.py migrate
-
-5. **Run the development server:**
-
+6. **Run the Development Server**:
     ```bash
     python manage.py runserver
+    ```
 
-6. **Access the API:**
-    Visit `http://127.0.0.1:8000/` in your browser or use a tool like Postman to interact with the API.
+7. **Access the API**:
+    Open your web browser and go to `http://127.0.0.1:8000/` to start using the API.
 
+## Deployment on PythonAnywhere
 
-### Populating Data
+The project has been deployed on PythonAnywhere. Below are the key steps:
 
-You can populate the `Branch` model from a CSV file using the custom management command `pop`.
+1. **Set Up a PythonAnywhere Account**:
+    - Create an account on PythonAnywhere and create a new web app.
+    - Choose the Django framework and the appropriate Python version.
 
-1. **Place your CSV file containing branch data in the desired location and update the file path in the `pop.py` command file:**
+2. **Upload Your Project Files**:
+    - Use the PythonAnywhere file browser to upload your project files or use Git to clone your repository.
 
-    csv_file_path = '/path/to/your/csv/file.csv'
+3. **Install Requirements**:
+    - In the PythonAnywhere console, navigate to your virtual environment and install dependencies:
+      ```bash
+      pip install -r requirements.txt
+      ```
 
-2. **Run the management command:**
-    python manage.py pop
-    This command will read the CSV file and populate the Branch model with the data.
+4. **Database Configuration**:
+    - Since PostgreSQL is a paid feature on PythonAnywhere, the database was switched to SQLite. The necessary changes were made in `settings.py`.
+
+5. **Collect Static Files**:
+    ```bash
+    python manage.py collectstatic
+    ```
+
+6. **Reload the Web App**:
+    - Finally, reload the web app from the PythonAnywhere dashboard.
+
+## Time Taken
+
+This assignment was completed within 1 day.
+
+## Notes
+
+- PostgreSQL was initially considered, but due to limitations on PythonAnywhere's free tier, SQLite was used instead.
